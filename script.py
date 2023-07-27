@@ -1,10 +1,9 @@
-print("Initialising...")
-
-print("Libs importing...")
 import os
-os.system("python -m pip install --upgrade pip")
-os.system("pip install -r requirements.txt")
+os.system("clear")
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 
+print("Initialising...")
+print("Libs importing...")
 # Capture an image from the camera and save
 from pygame import camera
 import pygame.image
@@ -26,6 +25,10 @@ print("Camera initiating...")
 # Initialize the camera
 camera.init()
 # Use pygame to get the image
+print(camera.list_cameras())
+if camera.list_cameras() == []:
+    print("!!! NO  CAMERAS FOUND !!!")
+    exit()
 cam = camera.Camera(camera.list_cameras()[0])
 cam.start()
 
