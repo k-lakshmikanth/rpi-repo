@@ -1,12 +1,12 @@
 import os
 os.system("clear")
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
+# os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 
 print("Initialising...")
 print("Libs importing...")
 # Capture an image from the camera and save
-from pygame import camera
-import pygame.image
+# from pygame import camera
+# import pygame.image
 
 import uuid
 from azure.storage.blob import BlobServiceClient
@@ -17,31 +17,32 @@ blob_service_client = BlobServiceClient.from_connection_string(connect_str)
 
 container_name = "cicd-data"
 local_file_name = uuid.uuid4().hex + ".jpg"
-upload_file_path = r"./image.jpg"
+upload_file_name = "image.jpg"
+upload_file_path = f"./{upload_file_name}"
 
 print("Camera initiating...")
 
 
 # Initialize the camera
-camera.init()
+# camera.init()
 # Use pygame to get the image
-print(camera.list_cameras())
-if camera.list_cameras() == []:
-    print("!!! NO  CAMERAS FOUND !!!")
-    exit()
-cam = camera.Camera(camera.list_cameras()[0])
-cam.start()
+# print(camera.list_cameras())
+print("-----------------")
+print(os.system("libcamera-still --list-cameras"))
+print("-----------------")
 
 print("Camera initiated")
 
+os.system(f"libcamera-jpeg -o {upload_file_name}")
+
 # Capture the image
-image = cam.get_image()
+#image = cam.get_image()
 # Save the image
-pygame.image.save(image, upload_file_path)
+#pygame.image.save(image, upload_file_path)
 # Stop the camera
-cam.stop()
+#cam.stop()
 # Exit the camera
-camera.quit()
+#camera.quit()
 
 print("Image captured")
 
@@ -56,7 +57,8 @@ try:
         blob_client.upload_blob(data)
 
     print("_\|/_ Image uploaded successfully  _\|/_ ")
-except:
+except Exception as e:
+    print(e)
     print("!!!Failed to upload!!!")
 
 os.remove(upload_file_path)
