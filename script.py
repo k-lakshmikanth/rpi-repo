@@ -26,7 +26,7 @@ print("Camera initiating...")
 # Initialize the camera
 camera.init()
 # Use pygame to get the image
-cam = camera.Camera()
+cam = camera.Camera(camera.list_cameras()[0])
 cam.start()
 
 print("Camera initiated")
