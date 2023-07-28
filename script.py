@@ -1,13 +1,10 @@
 import os
-os.system("clear")
-# os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 
 print("Initialising...")
 print("Libs importing...")
-# Capture an image from the camera and save
-# from pygame import camera
-# import pygame.image
 
+
+from picamera import PiCamera
 import uuid
 from azure.storage.blob import BlobServiceClient
 print("Libs Imported")
@@ -18,31 +15,17 @@ blob_service_client = BlobServiceClient.from_connection_string(connect_str)
 container_name = "cicd-data"
 local_file_name = uuid.uuid4().hex + ".jpg"
 upload_file_name = "image.jpg"
-upload_file_path = f"./{upload_file_name}"
+upload_file_path = f"/home/lucky/Desktop/img_uploader/{upload_file_name}"
 
 print("Camera initiating...")
 
-
-# Initialize the camera
-# camera.init()
-# Use pygame to get the image
-# print(camera.list_cameras())
-print("-----------------")
-print(os.system("libcamera-still --list-cameras"))
-print("-----------------")
+camera = PiCamera()
 
 print("Camera initiated")
 
-os.system(f"libcamera-jpeg -o {upload_file_name}")
+camera.capture(upload_file_path)
 
-# Capture the image
-#image = cam.get_image()
-# Save the image
-#pygame.image.save(image, upload_file_path)
-# Stop the camera
-#cam.stop()
-# Exit the camera
-#camera.quit()
+camera.close()
 
 print("Image captured")
 
