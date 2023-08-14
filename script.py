@@ -1,8 +1,8 @@
 import os
+from shutil import copyfile
 
 print("Initialising...")
 print("Libs importing...")
-
 
 from picamera import PiCamera
 import uuid
@@ -18,30 +18,22 @@ upload_file_name = "image.jpg"
 upload_file_path = f"/home/lucky/Desktop/img_uploader/{upload_file_name}"
 
 print("Camera initiating...")
-
 camera = PiCamera()
-
 print("Camera initiated")
-
 camera.capture(upload_file_path)
-
 camera.close()
 
 print("Image captured")
-
 print("Image uploading...")
 
 try:
     container_client = blob_service_client.get_container_client(container_name)
-
     blob_client = blob_service_client.get_blob_client(container=container_name, blob=local_file_name)
-
     with open(file=upload_file_path, mode="rb") as data:
         blob_client.upload_blob(data)
-
     print("_\|/_ Image uploaded successfully  _\|/_ ")
+    os.remove(upload_file_path)
 except Exception as e:
     print(e)
-    print("!!!Failed to upload!!!")
-
-os.remove(upload_file_path)
+    print("!!! Failed to upload !!!")
+    copyfile(upload_file_path, f"/home/lucky/Desktop/img_uploader/Images/{upload_file_name}")
